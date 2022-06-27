@@ -108,11 +108,11 @@ function characterEntry(entry) {
 
   apiRequest('/races/' + entry.race, function () {
     $sheetLanguages.textContent = 'Languages: ' + this.response.language_desc;
-    $sheetSize.textContent = "Size: " + this.response.size;
+    $sheetSize.textContent = 'Size: ' + this.response.size;
   });
 
   apiRequest('/classes/' + entry.class, function () {
-    $sheetHitDie.textContent = "Hit Die: " + this.response.hit_die;
+    $sheetHitDie.textContent = 'Hit Die: ' + this.response.hit_die;
   });
 }
 
@@ -401,6 +401,31 @@ itemSelection.addEventListener('click', function (event) {
   }
 });
 
+function statter(stat, newCharacter, currentCharacter) {
+  if (currentCharacter.statInitial.stat === 'Random') {
+    var randomNum = Math.floor(Math.random() * 20);
+    newCharacter.stat = randomNum;
+    newCharacter.statInitial.stat = currentCharacter.statInitial.stat;
+  } else {
+    newCharacter.statInitial.stat = currentCharacter.statInitial.stat;
+    newCharacter.stat = currentCharacter.stat;
+  }
+}
+
+function characterValues(nameValue, name, number, currentCharacter, newCharacter) {
+  if (nameValue === 'Random') {
+    var randomIndex = Math.floor(Math.random() * number);
+    newCharacter.name = randomIndex;
+    newCharacter.nameValue = 'Random';
+    console.log(newCharacter.nameValue);
+  } else {
+    newCharacter.name = nameValue;
+    newCharacter.nameValue = nameValue;
+    console.log(newCharacter.nameValue);
+  }
+
+}
+
 // Handles clicks on the character sheet page.
 characterSheet.addEventListener('click', function (event) {
   if (event.target.classList.contains('regen')) {
@@ -408,62 +433,24 @@ characterSheet.addEventListener('click', function (event) {
     description.innerHTML = '';
     var newCharacter = {};
     newCharacter.statInitial = currentCharacter.statInitial;
-    if (currentCharacter.statInitial.strength === 'Random') {
-      var randomNum = Math.floor(Math.random() * 20);
-      newCharacter.strength = randomNum;
-      newCharacter.statInitial.strength = currentCharacter.statInitial.strength;
-    } else {
-      newCharacter.statInitial.strength = currentCharacter.statInitial.strength;
-      newCharacter.strength = currentCharacter.strength;
-    }
-    if (currentCharacter.statInitial.dexterity === 'Random') {
-      var randomNumTwo = Math.floor(Math.random() * 20);
-      newCharacter.dexterity = randomNumTwo;
-      newCharacter.statInitial.dexterity = currentCharacter.statInitial.dexterity;
-    } else {
-      newCharacter.statInitial.dexterity = currentCharacter.statInitial.dexterity;
-      newCharacter.dexterity = currentCharacter.dexterity;
-    }
-    if (currentCharacter.statInitial.charisma === 'Random') {
-      var randomNumThree = Math.floor(Math.random() * 20);
-      newCharacter.charisma = randomNumThree;
-      newCharacter.statInitial.charisma = currentCharacter.statInitial.charisma;
-    } else {
-      newCharacter.statInitial.charisma = currentCharacter.statInitial.charisma;
-      newCharacter.charisma = currentCharacter.charisma;
-    }
-    if (currentCharacter.statInitial.wisdom === 'Random') {
-      var randomNumFour = Math.floor(Math.random() * 20);
-      newCharacter.wisdom = randomNumFour;
-      newCharacter.statInitial.wisdom = currentCharacter.statInitial.wisdom;
-    } else {
-      newCharacter.statInitial.wisdom = currentCharacter.statInitial.wisdom;
-      newCharacter.wisdom = currentCharacter.wisdom;
-    }
-    if (currentCharacter.statInitial.intelligence === 'Random') {
-      var randomNumFive = Math.floor(Math.random() * 20);
-      newCharacter.intelligence = randomNumFive;
-      newCharacter.statInitial.intelligence = currentCharacter.statInitial.intelligence;
-    } else {
-      newCharacter.statInitial.intelligence = currentCharacter.statInitial.intelligence;
-      newCharacter.intelligence = currentCharacter.intelligence;
-    }
-    if (currentCharacter.statInitial.constitution === 'Random') {
-      var randomNumSix = Math.floor(Math.random() * 20);
-      newCharacter.constitution = randomNumSix;
-      newCharacter.statInitial.constitution = currentCharacter.statInitial.constitution;
-    } else {
-      newCharacter.statInitial.constitution = currentCharacter.statInitial.constitution;
-      newCharacter.constitution = currentCharacter.constitution;
-    }
+    statter(strength, newCharacter, currentCharacter);
+    statter(dexterity, newCharacter, currentCharacter);
+    statter(charisma, newCharacter, currentCharacter);
+    statter(wisdom, newCharacter, currentCharacter);
+    statter(intelligence, newCharacter, currentCharacter);
+    statter(constitution, newCharacter, currentCharacter);
+    // characterValues('raceValue', 'race', 9, currentCharacter, newCharacter);
+
     if (currentCharacter.raceValue === 'Random') {
-      var randomIndex = Math.floor(Math.random() * races.response.results.length);
-      newCharacter.race = races.response.results[randomIndex].name;
+      var randomIndex = Math.floor(Math.random() * 9);
+      newCharacter.race = randomIndex;
       newCharacter.raceValue = 'Random';
+      console.log(currentCharacter.raceValue);
     } else {
       newCharacter.race = currentCharacter.raceValue;
       newCharacter.raceValue = currentCharacter.raceValue;
     }
+
     if (currentCharacter.roleValue === 'Random') {
       var classesIndex = Math.floor(Math.random() * classes.response.results.length);
       newCharacter.class = classes.response.results[classesIndex].name;
